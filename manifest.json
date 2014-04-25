@@ -1,0 +1,27 @@
+{
+	"name": "Q-Share for chrome",
+	"description": "分享你的内容到腾讯微博",
+	"version": "2",
+	"manifest_version": 2,
+	"icons": {
+		"16": "16.png",
+		"32": "32.png",
+		"48": "48.png",
+		"64": "64.png",
+		"128": "128.png"
+	},
+	"browser_action": {
+		"default_title": "分享到腾讯微博",
+		"default_icon": "48.png"
+	},
+	"permissions": ["contextMenus", "tabs"],
+	"homepage_url": "http://www.xiefucai.com/",
+	"background": {
+		"page": "background.html"
+	},
+	"content_scripts": [{
+		"matches": ["http://*/*", "https://*/*"],
+		"js": ["myscript.js"],
+		"all_frames": false
+	}]
+}
