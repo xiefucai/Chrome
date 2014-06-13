@@ -12,14 +12,13 @@
 		}
 		imgarr.push(encodeURIComponent(imgs[i].src));
 	}
-	console.log(imgarr);
 	return imgarr.length && imgarr.join("|") || simgarr.join("|");
 }
 
 chrome.extension.onRequest.addListener( 
 function(request, sender, sendResponse) {
      var imgs=_getImagesForQshare();
-     sendResponse({"images":imgs,"frameURL":((frameElement&&frameElement.src)||(location.href)),"isTop":!frameElement}); 
+     sendResponse({'images':imgs,'frameURL':((frameElement&&frameElement.src)||(location.href)),'isTop':!frameElement}); 
 }); 
 
 function alert(s){

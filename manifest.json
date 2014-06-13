@@ -1,6 +1,6 @@
 {
-	"name": "Q-Share for chrome",
-	"description": "分享你的内容到腾讯微博",
+	"name": "download what you like to xunlei router",
+	"description": "下载到迅雷路由",
 	"version": "2",
 	"manifest_version": 2,
 	"icons": {
@@ -11,8 +11,9 @@
 		"128": "128.png"
 	},
 	"browser_action": {
-		"default_title": "分享到腾讯微博",
-		"default_icon": "48.png"
+		"default_title": "下载到迅雷路由",
+		"default_icon": "48.png",
+		"default_popup": "popup.html"
 	},
 	"permissions": ["contextMenus", "tabs"],
 	"homepage_url": "http://www.xiefucai.com/",
