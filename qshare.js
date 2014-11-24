@@ -1,6 +1,6 @@
-﻿function _share_tencent_weibo(info, tab) {
+﻿function _share_tencent_weibo(info, tab) {console.log(info);
 	var url = 'http://www.peiluyou.com/frames/dowwload.task.html?url=$url$&name=$name$',
-	src = info.mediaType ? info.srcUrl: info.linkUrl,
+	src = info.mediaType ? info.srcUrl: info.linkUrl || info.selectionText,
 	redirect = url.replace('$url$', encodeURIComponent(src)).replace('$name$',document.title);console.log(info,document);
 	/*
 	var _s = (info.selectionText||'').replace(/[\s\n]+/g, ' ');
