@@ -1,0 +1,15 @@
+.idea
+.DS_Store
+# Logs
+logs
+*.log
+*.tar.gz
+*.zip
+**/.vscode/**
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+**/node_modules/**
+**/dist/**
+.vscode
