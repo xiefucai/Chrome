@@ -44,14 +44,15 @@ export default {
   methods: {
     openPage (href) {
       if (href) {
-        openUrl('读书人', './index.html?preview=' + encodeURIComponent(href))
+        openUrl('./index.html?preview=' + encodeURIComponent(href))
       } else {
-        openUrl('读书人', './index.html')
+        openUrl('./index.html')
       }
     }
   },
   created () {
     sendRequest('getRssInfo', data => {
+      console.log('====>', data)
       this.rssInfo = data
     })
   }

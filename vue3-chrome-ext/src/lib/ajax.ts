@@ -1,4 +1,12 @@
-const request = params => {
+interface Params {
+  url: string
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS'
+  timeout?: number
+  username?: string
+  password?: string
+  headers?: { [key: string]: string }
+}
+const request = (params: Params) => {
   return new Promise((resolve, reject) => {
     const ajax = new XMLHttpRequest()
     ajax.onreadystatechange = function (q) {
@@ -36,12 +44,12 @@ const request = params => {
   })
 }
 
-const get = async params => {
+const get = async (params: Params) => {
   return await request({ method: 'GET', ...params })
 }
 
-const post = async params => {
-  return await request({ method: 'POST' }, params)
+const post = async (params: Params) => {
+  return await request({ method: 'POST', ...params })
 }
 
 module.exports = { get, post }

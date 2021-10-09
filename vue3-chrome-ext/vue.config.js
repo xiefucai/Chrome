@@ -11,7 +11,7 @@ const chromeName = ['popup', 'background', 'options', 'content', 'index']
 
 chromeName.forEach(name => {
   pages[name] = {
-    entry: `src/pages/${name}/main.js`,
+    entry: `src/pages/${name}/main.ts`,
     template: 'public/index.html',
     filename: `${name}.html`,
     title: '读书人'

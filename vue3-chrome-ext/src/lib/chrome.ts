@@ -1,10 +1,14 @@
-const getTab = () => {
-  return new Promise((resolve, reject) => {
+interface ViewBox {
+  width: number;
+  height: number;
+  top: number;
+  left: number;
+}
+
+const getTab = (data: chrome.tabs.QueryInfo) => {
+  return new Promise<chrome.tabs.Tab>((resolve, reject) => {
     chrome.tabs.query(
-      {
-        active: true,
-        currentWindow: true
-      },
+      data,
       tabs => {
         resolve(tabs && tabs[0])
       }
@@ -17,10 +21,10 @@ const getCurrentTab = async () => {
     currentWindow: true
   })
 }
-const openUrl = async (title, url) => {
-  const tab = await getTab({ title })
+const openUrl = async (url: string) => {
+  const tab = await getTab({ url }) as chrome.tabs.Tab
   if (tab) {
-    console.log('openUrl update', title, url)
+    console.log('openUrl update', url)
 
     chrome.tabs.update(tab.id || tab.windowId, {
       active: true,
@@ -33,7 +37,7 @@ const openUrl = async (title, url) => {
       console.log('Failed to close popup window')
     }
   } else {
-    console.log('openUrl create', title, url)
+    console.log('openUrl create', url)
 
     chrome.tabs.create(
       {
@@ -51,8 +55,8 @@ const openUrl = async (title, url) => {
   }
 }
 
-const popUrl = (url, view) => {
-  const rect = {
+const popUrl = (url: string, view?: ViewBox) => {
+  const rect: ViewBox = {
     width: 500,
     height: 500,
     top: 0,
@@ -69,10 +73,10 @@ const popUrl = (url, view) => {
   })
 }
 
-const sendRequest = async (name, callback) => {
+const sendRequest = async (name: string, callback: (data: any) => void) => {
   const tab = await getCurrentTab()
   if (tab) {
-    chrome.tabs.sendMessage(tab.id, { name }, response => {
+    chrome.tabs.sendMessage(tab.id as number, { name }, response => {
       callback(response && response[name])
     })
   }

@@ -1,10 +1,10 @@
 <template>
-  <div class="">
-    <div class=""></div>
+  <div class="aa">
+    <div class="bb"></div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: 'Dialog',
   props: {

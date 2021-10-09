@@ -1,11 +1,11 @@
 class Session {
-  data = {}
+  data: { [key: string]: any } = {}
 
-  get (key) {
+  get (key: string) {
     return this.data[key]
   }
 
-  set (key, value) {
+  set (key: string, value: any) {
     this.data[key] = value
   }
 }

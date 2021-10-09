@@ -3,13 +3,13 @@ import { getCurrentTab } from '@/lib/chrome'
 const session = new Session()
 console.log('background is open')
 
-const actions = {
-  setRssLinks: data => {
+const actions: { [key: string]: (data: any, callback: any) => any } = {
+  setRssLinks: (data: any) => {
     chrome.browserAction.setBadgeText({ text: data.links.length.toString() })
   }
 }
 
-const getUrlOrigin = url => {
+const getUrlOrigin = (url?: string) => {
   if (url) {
     const a = document.createElement('a')
     a.href = url
@@ -41,7 +41,11 @@ chrome.tabs.onActivated.addListener(() => {
   changeBadge()
 })
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (
+  request: any,
+  sender: any,
+  sendResponse: any
+) {
   const origin = sender.origin
   const action = request.action
   if (session.get(origin)) {
@@ -57,3 +61,4 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
   }
 })
+export default {}

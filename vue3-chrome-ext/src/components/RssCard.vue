@@ -6,6 +6,7 @@
       class="block mx-auto h-24 rounded-full sm:mx-0 sm:flex-shrink-0"
       :src="value.icons[0].href"
       alt="Woman's Face"
+      v-if="value.icons && value.icons[0]"
     />
     <div class="text-center space-y-2 sm:text-left">
       <div class="space-y-0.5">
@@ -35,9 +36,9 @@ export default {
     openPage (href) {
       console.log('open page', href)
       if (href) {
-        openUrl('读书人', './index.html?preview=' + encodeURIComponent(href))
+        openUrl('./index.html?preview=' + encodeURIComponent(href))
       } else {
-        openUrl('读书人', './index.html')
+        openUrl('./index.html')
       }
     }
   }
