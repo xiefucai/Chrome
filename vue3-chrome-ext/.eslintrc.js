@@ -4,6 +4,7 @@ module.exports = {
     node: true
   },
   extends: [
+    'plugin:tailwind/recommended',
     'plugin:vue/vue3-essential',
     '@vue/standard'
   ],
@@ -13,10 +14,10 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    //'space-before-function-paren': 'off',
-    //'comma-dangle': 'off'
+    'space-before-function-paren': ['error', 'always']
+    // 'comma-dangle': 'off'
   },
   globals: {
     chrome: true
-  },
+  }
 }
