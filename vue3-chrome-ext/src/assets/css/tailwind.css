@@ -1,0 +1,20 @@
+/*
+https://www.tailwindcss.cn/docs/configuring-variants
+*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@custom-media --md (width >=640px);
+@custom-selector : --heading h1,
+h2,
+h3,
+h4,
+h5,
+h6;
+:--heading {
+    font-size: 125%;
+    @media (--md) {
+        font-size: 150%;
+    }
+}

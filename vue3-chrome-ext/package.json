@@ -12,6 +12,7 @@
     "@types/chrome": "^0.0.159",
     "autoprefixer": "^9",
     "core-js": "^3.6.5",
+    "dayjs": "^1.10.7",
     "postcss": "^7",
     "querystring": "^0.2.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",

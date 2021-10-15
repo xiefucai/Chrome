@@ -12,6 +12,7 @@ export interface Article {
   'slash:comments': string
   'wfw:commentRss': string
 }
+//
 export interface RssInfo {
   type: string
   version: string

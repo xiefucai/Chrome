@@ -1,0 +1,28 @@
+@layer components {
+    input,button,select,textarea{
+        @apply outline-none;
+    }
+    input[type="text"],input[type="password"],input[type="search"],input[type="number"],input[type="url"],input[type="email"],input[type="phone"],select{
+        @apply bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5;
+    }
+    input[type="checkbox"] {
+        @apply bg-gray-50 border-gray-300 focus:ring-0 focus:ring-blue-300 h-4 w-4 rounded;
+    }
+    input[type="checkbox"] + label,input[type="radio"] + label{
+        @apply font-medium text-gray-900;
+    }
+    .btn-blue {
+      @apply py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
+    }
+
+    .button {
+        /* @apply px-4 py-1 text-sm text-purple-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600  hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2; */
+        @apply bg-blue-500 hover:bg-blue-700 ring-0 text-white font-bold py-2 px-4 rounded 
+    }
+    .submit {
+        @apply text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center;
+    }
+    .label{
+        @apply text-sm font-medium text-gray-900 block mb-2
+    }
+}

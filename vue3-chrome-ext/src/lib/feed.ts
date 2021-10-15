@@ -22,6 +22,9 @@ const conf: { [key: string]: any } = {
   }
 }
 const readNode = <T>(node: HTMLElement | Element) => {
+  if (!node) {
+    return ''
+  }
   if (node.children.length > 0) {
     const result: T = {} as T
     ;[...node.children].forEach(child => {
@@ -32,6 +35,26 @@ const readNode = <T>(node: HTMLElement | Element) => {
     return (node.textContent || '').replace(/^\s+|\s+$/g, '')
   }
 }
+const readArticleNode = (
+  node: HTMLElement | Element,
+  keys: string[],
+  toKeys: string[]
+) => {
+  const data: { [key: string]: any } = {}
+
+  keys.forEach((key, i) => {
+    if (toKeys[i]) {
+      try {
+        data[key] = readNode<string>(node.querySelector(toKeys[i]) as Element)
+      } catch (err) {
+        console.warn(`no exist ${i}:${key}=>${toKeys[i]}`, err)
+      }
+    } else {
+    }
+  })
+
+  return data
+}
 const getNodeInfo = (feed: RssInfo, doc: Document) => {
   for (const key in conf[feed.type]) {
     const node = doc.querySelector(conf[feed.type][key])
@@ -41,12 +64,49 @@ const getNodeInfo = (feed: RssInfo, doc: Document) => {
   }
 }
 
+const ARTICLE_KEYS = [
+  'title',
+  'link',
+  'comments',
+  'pubDate',
+  'creator',
+  'category',
+  'description',
+  'guid',
+  'encoded',
+  'commentRss'
+]
+
+const ATOM_ARTICLE_KEYS = [
+  'title',
+  'link',
+  'summary',
+  'published',
+  'author',
+  '',
+  'content',
+  'id',
+  'content'
+]
 const getArticles = (feed: RssInfo, doc: Document) => {
   const articles: Article[] = []
   switch (feed.type) {
     case 'rss':
+      console.log(feed)
       ;[...doc.querySelectorAll('channel > item')].forEach(item => {
-        articles.push(readNode<Article>(item) as Article)
+        articles.push(
+          readArticleNode(item, ARTICLE_KEYS, ARTICLE_KEYS) as Article
+        )
+      })
+      break
+    case 'atom':
+      ;[...doc.querySelectorAll('feed > entry')].forEach(item => {
+        const article = readArticleNode(
+          item,
+          ARTICLE_KEYS,
+          ATOM_ARTICLE_KEYS
+        ) as Article
+        articles.push(article)
       })
       break
   }
@@ -77,6 +137,7 @@ const readFeed = (doc: Document) => {
         feed.version = typeNode.getAttribute('version') + ''
         feed.articles = getArticles(feed, doc)
         getNodeInfo(feed, doc)
+
         break
       case 'rdf:RDF':
         feed.type = 'rdf'
