@@ -35,9 +35,6 @@
     }],
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "externally_connectable": {
-        "matches": [
-            "http://*/*",
-            "https://*/*"
-        ]
+        "matches": []
     }
 }

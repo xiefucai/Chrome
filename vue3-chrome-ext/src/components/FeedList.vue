@@ -93,8 +93,8 @@
                 clip-rule="evenodd"
               ></path>
             </svg>
-            {{ feed.type }}{{ feed.version }}</small
-          >
+            {{ feed.type }}{{ feed.version }}
+          </small>
           <template v-if="feed.updated">
             <span class="mx-5">{{ dateTime(feed.updated) }}</span>
           </template>
@@ -111,11 +111,16 @@
         </blockquote>
       </div>
       <div>
-        <a class="button" @click="openFeedForm">订阅</a>
+        <a class="button" @click="unFeed" v-if="feeded">取消订阅</a>
+        <a class="button" @click="openFeedForm" v-else>订阅</a>
       </div>
     </div>
     <ol class="list-decimal divide-y divide-fuchsia-300">
-      <li v-for="(article, i) in feed.articles" :key="i" class="py-3">
+      <li
+        v-for="(article, i) in feed.articles"
+        :key="i"
+        class="py-3 clear-both"
+      >
         <h2 class="font-medium text-lg">
           <a :href="article.link" target="_blank" v-html="article.title"></a>
         </h2>
@@ -149,22 +154,61 @@ import dayjs from 'dayjs'
 import { RssInfo } from '@/@types/feed'
 import V3Layer from '@/components/Dialog'
 import FeedForm from '@/components/FeedForm.vue'
+import { feed, FeedValue } from '@/lib/db'
+
 @Options({
   props: {
-    feed: Object
+    feed: Object,
+    feeded: Boolean
   }
 })
 export default class FeedList extends Vue {
   feed!: RssInfo
+  feeded: boolean = false
   dateTime (value: string) {
     return dayjs(value).format('YYYY-MM-DD hh:mm:ss')
   }
 
   openFeedForm () {
-    V3Layer({ content: FeedForm, ensureText: '确定' }, async data => {
-      console.log(data)
-      return 111
-    })
+    const self = this
+    V3Layer(
+      {
+        title: '添加订阅源',
+        content: FeedForm,
+        ensureText: '确定',
+        value: this.feed
+      },
+      async (data: FeedValue) => {
+        feed
+          .add(data)
+          .then(ret => {
+            console.log(ret)
+            self.$emit('setFeeded', true)
+          })
+          .catch(err => console.warn(err))
+        // return 111
+      }
+    )
+  }
+
+  unFeed () {
+    const self = this
+    V3Layer.confirm(
+      {
+        content: '是否取消订阅?',
+        ensureText: '确定'
+        // value: this.feed
+      },
+      async (data: FeedValue) => {
+        feed
+          .remove(this.feed.url)
+          .then(ret => {
+            self.$emit('setFeeded', false)
+          })
+          .catch(err => console.warn(err))
+        // return 111
+      }
+    )
   }
 }
 </script>

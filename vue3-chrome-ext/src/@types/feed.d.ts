@@ -17,6 +17,7 @@ export interface RssInfo {
   type: string
   version: string
   language: string | null
+  url: string
   title: string | null | undefined
   description: string
   updated: string

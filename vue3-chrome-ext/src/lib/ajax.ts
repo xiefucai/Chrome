@@ -52,4 +52,4 @@ const post = async (params: Params) => {
   return await request({ method: 'POST', ...params })
 }
 
-module.exports = { get, post }
+export { get, post }

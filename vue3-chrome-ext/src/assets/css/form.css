@@ -2,13 +2,24 @@
     input,button,select,textarea{
         @apply outline-none;
     }
-    input[type="text"],input[type="password"],input[type="search"],input[type="number"],input[type="url"],input[type="email"],input[type="phone"],select{
-        @apply bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5;
+    input[type="text"],
+    input[type="password"],
+    input[type="search"],
+    input[type="number"],
+    input[type="url"],
+    input[type="email"],
+    input[type="phone"],
+    select{
+        @apply bg-gray-50 border border-gray-300 text-gray-900 
+        sm:text-sm 
+        rounded-lg focus:ring-blue-500 
+        focus:border-blue-500 block w-full p-2.5 !important;
     }
     input[type="checkbox"] {
         @apply bg-gray-50 border-gray-300 focus:ring-0 focus:ring-blue-300 h-4 w-4 rounded;
     }
-    input[type="checkbox"] + label,input[type="radio"] + label{
+    input[type="checkbox"] + label,
+    input[type="radio"] + label{
         @apply font-medium text-gray-900;
     }
     .btn-blue {

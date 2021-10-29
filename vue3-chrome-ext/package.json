@@ -13,9 +13,11 @@
     "autoprefixer": "^9",
     "core-js": "^3.6.5",
     "dayjs": "^1.10.7",
+    "idb": "^6.1.5",
     "postcss": "^7",
     "querystring": "^0.2.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
+    "ts-md5": "^1.2.9",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0"
   },
