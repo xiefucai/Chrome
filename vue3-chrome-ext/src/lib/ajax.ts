@@ -7,8 +7,8 @@ interface Params {
   headers?: { [key: string]: string }
 }
 const request = (params: Params) => {
-  return new Promise((resolve, reject) => {
-    const ajax = new XMLHttpRequest()
+  return new Promise<XMLHttpRequest>((resolve, reject) => {
+    const ajax: XMLHttpRequest = new XMLHttpRequest()
     ajax.onreadystatechange = function (q) {
       if (ajax.readyState === 4) {
         if (ajax.status === 200) {

@@ -27,7 +27,7 @@
           <label for="title" class="label"
             >文件夹<a @click="createCollection" class="ml-5">新建</a></label
           >
-          <select v-model="value.feedId">
+          <select v-model="value.collectionId">
             <option :value="0">根</option>
             <option
               v-for="(value, i) in feedCategorys"
@@ -105,7 +105,8 @@
 import { reactive } from 'vue'
 import { Options, Vue } from 'vue-class-component'
 import V3Layer from '@/components/Dialog'
-import { collection, CollectionValue } from '@/lib/db'
+import { CollectionValue } from '@/@types/db'
+import { collection } from '@/lib/db'
 import Toast from '@/components/Toast'
 
 const Mintue = 60
@@ -188,7 +189,7 @@ export default class FeedForm extends Vue {
       originalName: val.title,
       unreadEntries: 0,
       updateEnterval: val.updateEnterval,
-      lastUpdate: getTime(val.updated),
+      lastUpdate: getTime(val.updated) || now,
 
       link: val.url,
       maxNumEntries: val.maxNumEntries,
@@ -197,7 +198,7 @@ export default class FeedForm extends Vue {
       autoUpdate: true,
       notificationEnabled: true,
 
-      feedId: val.feedId
+      collectionId: val.collectionId
     }
   }
 
@@ -238,7 +239,7 @@ export default class FeedForm extends Vue {
         console.log(id, id > 0)
         if (id > 0) {
           this.reloadCollections(() => {
-            this.value.feedId = id
+            this.value.collectionId = id
           })
         }
       }

@@ -22,28 +22,32 @@
           }}</a>
         </p>
       </div>
-      <button class="button">订阅</button>
+      <button class="button" v-if="rss.feeded" disabled>已订阅</button>
+      <button class="button" v-else>订阅</button>
       <button class="button ml-5" @click="openPage(value.href)">预览</button>
     </div>
   </div>
 </template>
-<script>
-import { ref, onMounted, watch, toRefs } from 'vue'
+<script lang="ts">
+import { ref, onMounted, watch, toRefs, defineComponent } from 'vue'
 
 import { openUrl } from '@/lib/chrome'
 import { readFeed } from '@/lib/feed'
 import { get } from '@/lib/ajax'
+import { FeedValue } from '@/@types/db'
+import { feed } from '@/lib/db'
+import { RssInfo } from '@/@types/feed'
 
-export default {
+export default defineComponent({
   name: 'RssCard',
   props: {
-    value: Object
+    value: { type: Object as () => { href: string }, required: true }
   },
   created () {
-    console.log(this.value, this.feed)
+    // console.log(this.value, this.feed)
   },
   methods: {
-    openPage (href) {
+    openPage (href: string) {
       if (href) {
         openUrl('./index.html?preview=' + encodeURIComponent(href))
       } else {
@@ -53,9 +57,15 @@ export default {
   },
   setup (props) {
     const { value } = toRefs(props)
-
-    const rss = ref({})
+    const rss = ref(
+      {} as {
+        feed: RssInfo | null
+        feeded?: FeedValue
+        error?: string
+      }
+    )
     const getFeedInfo = async () => {
+      rss.value.feeded = await feed.get(value.value.href)
       const data = await get({ url: value.value.href }).then(
         res => res.responseXML
       )
@@ -74,8 +84,8 @@ export default {
       rss
     }
   }
-}
+})
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style src="@/assets/css/form.css"></style>

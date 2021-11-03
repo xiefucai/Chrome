@@ -1,89 +1,8 @@
 import { openDB, DBSchema, IDBPDatabase } from 'idb'
 import { Md5 } from 'ts-md5/dist/md5'
+import { FeedDB, CollectionValue, FeedValue, EntireValue } from '@/@types/db'
 // https://github.com/jakearchibald/idb#examples
-type SessionValue = number | string
-interface Session {
-  key: string
-  value: SessionValue
-}
 
-export interface CollectionValue {
-  created: number
-  updated: number
-  id?: number
-  name: string
-  sort: number
-}
-interface Collection {
-  key: number
-  value: CollectionValue
-  indexes: { 'by-name': string }
-}
-export interface FeedValue {
-  id?: string
-  name: string
-  url: string
-  icon: string
-
-  originalName: string
-  unreadEntries: number
-  updateEnterval: number
-  lastUpdate: number
-
-  link: string
-  maxNumEntries: number
-  updated: number
-  created: number
-  autoUpdate: boolean
-  notificationEnabled: boolean
-
-  collectionId: number
-}
-interface Feed {
-  key: string
-  value: FeedValue
-  indexes: { 'by-url': string; 'by-name': string }
-}
-
-export interface EntireValue {
-  id?: string
-  title: string
-  link: string
-
-  shortContent: string
-  content?: string
-
-  author?: string
-
-  image?: string
-  published: number
-  readLater: 0 | 1
-
-  // type: 'rss' | 'atom' | 'feed'
-  readed: 0 | 1
-
-  feed?: string
-  feedId: number
-}
-interface FeedDB extends DBSchema {
-  session: Session
-  collections: Collection
-  feeds: Feed
-  entries: {
-    key: string
-    value: EntireValue
-    indexes: { 'by-link': string; 'by-collection-id': number }
-  }
-  /* products: {
-    value: {
-      name: string
-      price: number
-      productCode: string
-    }
-    key: string
-    indexes: { 'by-price': number }
-  } */
-}
 let cacheDb: IDBPDatabase<FeedDB>
 const getDb = async (name: string, version: number) => {
   if (cacheDb) {
@@ -110,6 +29,9 @@ const getDb = async (name: string, version: number) => {
         keyPath: 'id'
       })
       entrieStore.createIndex('by-link', 'link')
+      entrieStore.createIndex('by-feed-id', 'feedId')
+      entrieStore.createIndex('by-ctime', 'ctime')
+      entrieStore.createIndex('by-utime', 'utime')
       /* const productStore = db.createObjectStore('products', {
         keyPath: 'productCode'
       })
@@ -120,6 +42,7 @@ const getDb = async (name: string, version: number) => {
   return cacheDb
 }
 
+const getNow = () => Math.floor(Date.now() / 1000)
 const DB_NAME = 'feeddb'
 const DB_VERSION = 1
 const session = {
@@ -136,7 +59,7 @@ const session = {
 const collection = {
   async add (name: string) {
     const db = await getDb(DB_NAME, DB_VERSION)
-    const now = Math.floor(Date.now() / 1000)
+    const now = getNow()
     /* {
       created: number
       updated: number
@@ -178,7 +101,9 @@ const feed = {
   },
   async set (key: string, val: FeedValue) {
     const db = await getDb(DB_NAME, DB_VERSION)
-    return await db.put('feeds', val, key)
+    // delete val.id
+    val.updated = getNow()
+    return await db.put('feeds', val)
   },
   async get (url: string) {
     const db = await getDb(DB_NAME, DB_VERSION)
@@ -198,12 +123,20 @@ const feed = {
 
 const entries = {
   async add (val: EntireValue) {
+    if (!val.link) {
+      throw new Error('文章链接不能为空')
+    }
+    val.ctime = getNow()
+    val.utime = val.ctime
     val.id = Md5.hashStr(val.link)
     const db = await getDb(DB_NAME, DB_VERSION)
     return await db.add('entries', val)
   },
   async set (key: string, val: EntireValue) {
     const db = await getDb(DB_NAME, DB_VERSION)
+    val.utime = getNow()
+    console.log('update entries', key, val)
+    delete val.id
     return await db.put('entries', val, key)
   },
   async get (url: string) {
@@ -219,6 +152,10 @@ const entries = {
     const db = await getDb(DB_NAME, DB_VERSION)
     const key = Md5.hashStr(url)
     return await db.delete('entries', key)
+  },
+  async getStore (mode?: 'readonly' | 'readwrite') {
+    const db = await getDb(DB_NAME, DB_VERSION)
+    return db.transaction('entries', mode || 'readonly')
   }
 }
 /* async function demo () {

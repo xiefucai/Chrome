@@ -21,34 +21,64 @@ const conf: { [key: string]: any } = {
     favicon: 'feed > image'
   }
 }
-const readNode = <T>(node: HTMLElement | Element) => {
+const readNode = <T>(node: HTMLElement | Element, attr?: string) => {
   if (!node) {
     return ''
   }
   if (node.children.length > 0) {
     const result: T = {} as T
     ;[...node.children].forEach(child => {
-      ;(result as any)[child.nodeName] = readNode(child)
+      ;(result as any)[child.nodeName] = readNode(child, attr)
     })
     return result
   } else {
+    if (attr) {
+      return node.getAttribute(attr)
+    }
     return (node.textContent || '').replace(/^\s+|\s+$/g, '')
   }
 }
+type ToKey = string | string[]
 const readArticleNode = (
   node: HTMLElement | Element,
   keys: string[],
-  toKeys: string[]
+  toKeys: ToKey[]
 ) => {
   const data: { [key: string]: any } = {}
+  const getKeyValue = (toKey: ToKey) => {
+    const splitToKey = (k: string) => {
+      return k.split('@')
+    }
+    const getSingToKey = (keyName: string) => {
+      const [toInnerKey, toInnerAttr] = splitToKey(keyName)
+      return readNode<string>(
+        node.querySelector(toInnerKey) as Element,
+        toInnerAttr
+      )
+    }
+    if (typeof toKey === 'string') {
+      return getSingToKey(toKey)
+    }
+    if (Array.isArray(toKey)) {
+      for (let i = 0, k = toKey.length; i < k; i++) {
+        const keyName = toKey[i]
+        const value = getSingToKey(keyName)
+        if (value) {
+          return value
+        }
+      }
+    }
+    /* const [toKey, toAttr] = toKeys[i].split('@')
+    try {
+      data[key] = readNode<string>(node.querySelector(toKey) as Element, toAttr)
+    } catch (err) {
+      console.warn(`no exist ${i}:${key}=>${toKeys[i]}`, err)
+    } */
+  }
 
   keys.forEach((key, i) => {
     if (toKeys[i]) {
-      try {
-        data[key] = readNode<string>(node.querySelector(toKeys[i]) as Element)
-      } catch (err) {
-        console.warn(`no exist ${i}:${key}=>${toKeys[i]}`, err)
-      }
+      data[key] = getKeyValue(toKeys[i])
     } else {
     }
   })
@@ -79,7 +109,7 @@ const ARTICLE_KEYS = [
 
 const ATOM_ARTICLE_KEYS = [
   'title',
-  'link',
+  ['link', 'link@href'],
   'summary',
   'published',
   'author',

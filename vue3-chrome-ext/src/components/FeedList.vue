@@ -154,7 +154,8 @@ import dayjs from 'dayjs'
 import { RssInfo } from '@/@types/feed'
 import V3Layer from '@/components/Dialog'
 import FeedForm from '@/components/FeedForm.vue'
-import { feed, FeedValue } from '@/lib/db'
+import { FeedValue } from '@/@types/db'
+import { feed } from '@/lib/db'
 
 @Options({
   props: {

@@ -1,29 +1,37 @@
 <template>
-  <div>
-    <FeedList
-      v-if="feed"
-      :feed="feed"
-      :feeded="feeded"
-      @setFeeded="setFeeded"
-    />
+  <div class="flex flex-col h-full">
+    <div class="h-10"></div>
+    <div class="flex-1 flex flex-row">
+      <div class="h-full w-60">
+        <!-- 导航栏 -->
+        <div></div>
+
+        <!-- 目录 -->
+        <div>
+          <Collections />
+        </div>
+      </div>
+      <div class="h-full w-60"></div>
+      <div class="h-full flex-1">
+        <Preview v-if="mode === 'preview'" :feedUrl="feedUrl"></Preview>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { openUrl } from '@/lib/chrome'
 import querystring from 'querystring'
-import { get } from '@/lib/ajax'
-import { readFeed } from '@/lib/feed'
+import Preview from './preview.vue'
+import Collections from './collections.vue'
 
-import FeedList from '@/components/FeedList'
-import { feed } from '@/lib/db'
 export default {
   name: 'App',
-  components: { FeedList },
+  components: { Preview, Collections },
   data () {
     return {
-      feed: null,
-      feeded: false
+      mode: '',
+      feedUrl: ''
     }
   },
   methods: {
@@ -39,27 +47,10 @@ export default {
     }
   },
   created () {
-    const self = this
     const params = querystring.decode(location.search.slice(1))
     if (params.preview) {
-      ;(async () => {
-        const data = await get({ url: params.preview }).then(
-          res => res.responseXML
-        )
-        if (data) {
-          const feedInfo = readFeed(data)
-          const feededInfo = await feed.get(params.preview)
-          if (feededInfo) {
-            self.setFeeded(true)
-          }
-          self.feed = { ...feedInfo, url: params.preview }
-        } else {
-          console.error('无法加载源预览: 601 无效的XML')
-          // 无法加载源预览: 601 无效的XML
-        }
-      })().catch(err => {
-        console.warn(err)
-      })
+      this.mode = 'preview'
+      this.feedUrl = params.preview
     }
   }
 }

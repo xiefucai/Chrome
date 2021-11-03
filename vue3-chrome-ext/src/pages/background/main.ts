@@ -44,15 +44,19 @@ const changeBadge = async () => {
     if (origin) {
       const data = session.get(origin)
       if (data) {
-        chrome.browserAction.setBadgeText({
-          text: data.links.length.toString()
-        })
-        console.log('changeBadge', tab, data)
+        if (tab.url && tab.url.indexOf('chrome-extension://') < 0) {
+          chrome.browserAction.setBadgeText({
+            text: data.links.length.toString()
+          })
+        }
         return
       }
     }
-    if (origin && origin.indexOf('chrome://') === 0) {
-      console.log('changeBadge ====>', { url: tab.url, origin })
+    if (
+      origin &&
+      (origin.indexOf('chrome://') === 0 ||
+        origin.indexOf('chrome-extension://') === 0)
+    ) {
       return
     }
   }
