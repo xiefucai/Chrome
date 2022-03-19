@@ -1,16 +1,22 @@
 html{
 	zoom: 0.75;
 }
+/* html *{
+    outline: 1px solid #f00;
+} */
 .Nav_nav__3wFB0,
 .Search_search__3tl_B,
 .jsx-2211446375,
-.Content_right__IdsQY {
+.Content_right__IdsQY,.Content_right__QH2VD,
+.jsx-1311071109,
+.Oxford_oxford__23fNQ  {
     display: none !important;
 }
 
 .Content_center__z9WQY,
 .Content_content__eIxcI,
-.DicTab_content__V2ht9 {
+.DicTab_content__V2ht9,
+.DicTab_tab__q1zCE .DicTab_content__jXwNt {
     width: auto !important;
     margin: 0px !important;
 }
