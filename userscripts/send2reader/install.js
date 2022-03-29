@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name        send2reader
-// @version     0.1.0
+// @name        FCTool
+// @version     0.1.1
 // @author      xiefucai
-// @description 将文章内容转为markdown。
+// @description 这是一款可以功能强大、使用简单的工具\n可将网页文章内容转为markdown文档\n可提取网页中的svg图片\n阅读的时候可以高亮显示选中的文本(需要在设置中打开，每个网站的设置都是独立的)\n可以根据规则隐藏广告内容(需要在设置中打开，每个网站的设置都是独立的)\n可以高亮下载链接，进入电影天堂等下载站的时候，如果页面中有下载地址，会高亮出来，点击下载地址方便下载到迅雷云盘或者玩客云。。
 // @homepage    http://xiefucai.gitee.io
 // @match       *://*/*
 // @namespace   http://tampermonkey.net/
@@ -11,7 +11,7 @@
 // @grant       GM_getResourceText
 // @grant       GM_addStyle
 // @grant       GM_xmlhttpRequest
-// @resource    injectScript   https://cdn.jsdelivr.net/gh/xiefucai/Chrome@master/userscripts/send2reader/index1.js
+// @resource    injectScript   https://cdn.jsdelivr.net/gh/xiefucai/Chrome@master/userscripts/send2reader/index.js
 // @resource    injectScript_test   https://localhost:3000/static/js/index.bundle.js?32
 // ==/UserScript==
 
